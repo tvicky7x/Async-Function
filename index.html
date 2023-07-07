@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Async Function</title>
+  </head>
+  <body>
+    <h1 id="head">Async Function</h1>
+    <script>
+      let posts = [];
+      let lastUserTimer = [];
+      function createPost(post) {
+        return new Promise((res, rej) => {
+          setTimeout(() => {
+            posts.push(post);
+            res();
+          }, 2000);
+        });
+      }
+      function deletePost() {
+        return new Promise((res, rej) => {
+          setTimeout(() => {
+            posts.pop();
+            res();
+          }, 2000);
+        });
+      }
+      function updateLastUserActivity() {
+        return new Promise((res, rej) => {
+          setTimeout(() => {
+            lastUserTimer.push(new Date());
+            res();
+          }, 1000);
+        });
+      }
+      async function allPost(post) {
+        await Promise.all([createPost(post), updateLastUserActivity()]).then(
+          () => {
+            console.log(post.title);
+            console.log(lastUserTimer);
+          }
+        );
+        await Promise.all([deletePost(), updateLastUserActivity()]).then(() => {
+          console.log(posts);
+          console.log(lastUserTimer);
+        });
+      }
+
+      allPost({ title: "POST1" });
+    </script>
+  </body>
+</html>
